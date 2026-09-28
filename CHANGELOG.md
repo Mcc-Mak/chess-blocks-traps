@@ -3,6 +3,11 @@
 本檔案記錄本專案所有重要變更。
 版本遵循[語意化版本](https://semver.org/) `MAJOR.MINOR.PATCH`。
 
+## [1.4.3] - 2026-09-28
+
+### 修正
+- `README.md` 示範影片改用 `raw.githubusercontent.com` 絕對 URL，修復 GitHub README 無法播放相對路徑影片的問題。
+
 ## [1.4.2] - 2026-09-28
 
 ### 新增
