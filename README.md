@@ -8,9 +8,9 @@
 
 ## 示範影片
 
-<video src="https://github.com/Mcc-Mak/chess-blocks-traps/releases/download/v1.4.4/demo.mp4" controls autoplay loop muted width="100%"></video>
+![示範影片](demo.gif)
 
-[下載示範影片](https://github.com/Mcc-Mak/chess-blocks-traps/releases/download/v1.4.4/demo.mp4)
+[下載完整影片（MP4）](https://github.com/Mcc-Mak/chess-blocks-traps/releases/download/v1.4.4/demo.mp4)
 
 ## 規則
 
