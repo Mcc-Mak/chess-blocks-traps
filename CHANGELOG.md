@@ -3,6 +3,18 @@
 本檔案記錄本專案所有重要變更。
 版本遵循[語意化版本](https://semver.org/) `MAJOR.MINOR.PATCH`。
 
+## [1.4.0] - 2026-09-28
+
+### 新增
+- `doc/UserStories.md`——使用者故事文件（6 則故事卡、Given-When-Then 驗收條件、依賴關係圖、開發順序建議）。
+- `doc/RTM.md`——需求追溯矩陣（需求↔設計↔程式碼↔驗證雙向追溯、反向追溯、覆蓋率摘要）。
+- `doc/Governance.md`——專案治理文件（SMART 目標、治理結構、RACI 矩陣、決策權限層級、變更管理流程、版本治理）。
+
+### 變更
+- `doc/Architecture.md`——所有 ASCII 圖表改為 Mermaid 圖（flowchart、sequenceDiagram）。
+- `doc/ER.md`——所有 ASCII 圖表改為 Mermaid 圖（erDiagram、flowchart、stateDiagram-v2）。
+- `TOCTREE.md` 新增 UserStories、RTM、Governance 連結；更新 Architecture、ER 說明標註 Mermaid。
+
 ## [1.3.1] - 2026-09-28
 
 ### 新增
