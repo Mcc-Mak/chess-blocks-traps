@@ -3,6 +3,13 @@
 All notable changes to this project are documented in this file.
 Versions follow [Semantic Versioning](https://semver.org/) `MAJOR.MINOR.PATCH`.
 
+## [1.2.1] - 2026-09-28
+
+### Changed
+- The player-turn panel (`.panel-turn`) now switches background color,
+  border, and glow based on the active player (blue for Player 1, red for
+  Player 2) to make turn changes more visually obvious.
+
 ## [1.2.0] - 2026-09-28
 
 ### Changed

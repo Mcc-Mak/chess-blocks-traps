@@ -202,6 +202,23 @@ tr.chessboard td:hover {
   font-weight: 700;
 }
 
+.panel-turn {
+  border-color: transparent;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.panel-turn.turn-p1 {
+  background: linear-gradient(135deg, rgba(74, 144, 217, 0.28), var(--panel-bg));
+  border-color: var(--p1);
+  box-shadow: 0 0 18px rgba(74, 144, 217, 0.35), 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.panel-turn.turn-p2 {
+  background: linear-gradient(135deg, rgba(217, 83, 79, 0.28), var(--panel-bg));
+  border-color: var(--p2);
+  box-shadow: 0 0 18px rgba(217, 83, 79, 0.35), 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
 .panel-turn .turn-display {
   display: flex;
   align-items: center;
