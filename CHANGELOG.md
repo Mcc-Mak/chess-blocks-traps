@@ -3,6 +3,11 @@
 All notable changes to this project are documented in this file.
 Versions follow [Semantic Versioning](https://semver.org/) `MAJOR.MINOR.PATCH`.
 
+## [1.2.2] - 2026-09-28
+
+### Changed
+- Board coordinates reverted to alphanumeric (A–H columns, 1–8 rows).
+
 ## [1.2.1] - 2026-09-28
 
 ### Changed
