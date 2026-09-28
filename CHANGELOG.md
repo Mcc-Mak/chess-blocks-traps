@@ -3,6 +3,21 @@
 本檔案記錄本專案所有重要變更。
 版本遵循[語意化版本](https://semver.org/) `MAJOR.MINOR.PATCH`。
 
+## [1.3.0] - 2026-09-28
+
+### 新增
+- 建立完整文件體系：`TOCTREE.md`（根目錄）+ `doc/` 目錄，含：
+  - `doc/ProjectCharter.md`——專案章程（願景、目標、範圍、利害關係人）
+  - `doc/PRD.md`——產品需求文件（使用者故事、驗收條件、功能優先級）
+  - `doc/SRS.md`——軟體需求規格書（功能性與非功能性需求）
+  - `doc/ADR.md`——架構決策記錄（8 項關鍵技術決策）
+  - `doc/API.md`——API 文件（Game/Player/Cell 類別、useGame Hook、元件 Props）
+  - `doc/Schema.md`——資料結構綱要（列舉常數、設定值、狀態形狀、初始棋盤）
+  - `doc/ER.md`——實體關係圖（Game↔Cell↔Player 關係、生命週期、狀態轉換矩陣）
+  - `doc/QuickStart.md`——快速開始指南（安裝、開發、建置、部署）
+- `README.md` 新增 TOCTREE.md 連結。
+- `AGENTS.md` 新增文件同步規則：每次變更須更新 `doc/*.md` 與 `TOCTREE.md`。
+
 ## [1.2.3] - 2026-09-28
 
 ### 變更

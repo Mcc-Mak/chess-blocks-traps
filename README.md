@@ -4,6 +4,8 @@
 
 **線上版本：** <https://mcc-mak.github.io/chess_blocks_traps/>
 
+> 完整文件索引見 [TOCTREE.md](TOCTREE.md)。
+
 ## 規則
 
 - **每回合僅能執行一項動作**：移動棋子、放置方塊或放置炸彈，三選一。
