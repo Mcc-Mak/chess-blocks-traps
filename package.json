@@ -1,9 +1,9 @@
 {
-  "name": "anonymous-chessboard",
+  "name": "chess-blocks-traps",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
-  "description": "A 2-player chess variant with blocks and traps.",
+  "description": "A 2-player chess variant with blocks and traps. Bilingual (Traditional Chinese / English).",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
