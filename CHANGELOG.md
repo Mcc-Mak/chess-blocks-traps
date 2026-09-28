@@ -3,6 +3,12 @@
 本檔案記錄本專案所有重要變更。
 版本遵循[語意化版本](https://semver.org/) `MAJOR.MINOR.PATCH`。
 
+## [1.4.4] - 2026-09-28
+
+### 修正
+- `README.md` 示範影片改用 GitHub Release 資產 URL，修復 `raw.githubusercontent.com` 因 `text/plain` Content-Type 導致瀏覽器無法播放的問題。
+- 建立 GitHub Release `v1.4.4` 並上傳 `demo.mp4` 為發布資產。
+
 ## [1.4.3] - 2026-09-28
 
 ### 修正
