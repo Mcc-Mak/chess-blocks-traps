@@ -6,21 +6,30 @@
 
 ## 1. 實體總覽
 
-```
-┌─────────────┐     1    N ┌─────────┐
-│    Game     │────────────│  Cell   │
-│             │  contains  │         │
-│ turn        │  (board)   │ value   │
-│ winner      │            │ name    │
-│ selection   │            └─────────┘
-│             │
-│             │     1    2 ┌─────────┐
-│             │────────────│ Player  │
-│             │  has       │         │
-└─────────────┘            │ score   │
-                           │ blocks  │
-                           │ bombs   │
-                           └─────────┘
+```mermaid
+erDiagram
+    Game ||--|{ Cell : "contains (board)"
+    Game ||--|| Player : "has player 1"
+    Game ||--|| Player : "has player 2"
+
+    Game {
+        int turn "當前玩家"
+        int winner "獲勝者"
+        object selection "選取狀態"
+        Cell[][] board "8x8 棋盤"
+        Player players "兩個玩家"
+    }
+
+    Cell {
+        int value "格子類型 CELL"
+        int name "所有者 PLAYER"
+    }
+
+    Player {
+        int score "目前分數"
+        int blocks "剩餘方塊"
+        int bombs "剩餘炸彈"
+    }
 ```
 
 ---
@@ -67,43 +76,65 @@ Game.players: {
 
 ### Game
 
-```
-Game.initial()  ──→  new Game({...})
-                          │
-        ┌─────────────────┼─────────────────┐
-        ▼                 ▼                 ▼
-   selectChess()     selectBlock()      selectBomb()
-        │                 │                 │
-        ▼                 ▼                 ▼
-   moveChess()       placeBlock()       placeBomb()
-        │                 │                 │
-        └─────────────────┼─────────────────┘
-                          ▼
-                   clone() → 新 Game
-                   （回合切換或勝利）
+```mermaid
+flowchart TB
+    Initial["Game.initial()"]
+    NewGame["new Game({...})"]
+    SelChess["selectChess()"]
+    SelBlock["selectBlock()"]
+    SelBomb["selectBomb()"]
+    Move["moveChess()"]
+    PlaceB["placeBlock()"]
+    PlaceBomb["placeBomb()"]
+    Clone["clone() → 新 Game\n回合切換或勝利"]
+
+    Initial --> NewGame
+    NewGame --> SelChess
+    NewGame --> SelBlock
+    NewGame --> SelBomb
+    SelChess --> Move
+    SelBlock --> PlaceB
+    SelBomb --> PlaceBomb
+    Move --> Clone
+    PlaceB --> Clone
+    PlaceBomb --> Clone
 ```
 
 ### Cell
 
-```
-Cell.space()  ←─  初始空格 / 棋子離開後 / 得分後
-Cell.chess(p) ←─  初始棋子 / 棋子移入
-Cell.bomb()   ←─  玩家放置炸彈
-Cell.block(p) ←─  玩家放置方塊
-Cell.explosion() ←─ 棋子踩到炸彈
+```mermaid
+flowchart LR
+    Space["Cell.space()"]
+    Chess["Cell.chess(p)"]
+    Bomb["Cell.bomb()"]
+    Block["Cell.block(p)"]
+    Explosion["Cell.explosion()"]
+
+    InitSpace["初始空格 / 棋子離開後 / 得分後"]
+    InitChess["初始棋子 / 棋子移入"]
+    PlaceBomb["玩家放置炸彈"]
+    PlaceBlock["玩家放置方塊"]
+    TriggerBomb["棋子踩到炸彈"]
+
+    InitSpace --> Space
+    InitChess --> Chess
+    PlaceBomb --> Bomb
+    PlaceBlock --> Block
+    TriggerBomb --> Explosion
 ```
 
 ### Player
 
-```
-new Player()  ──→  { score: 0, blocks: 3, bombs: 3 }
-                          │
-          ┌───────────────┼───────────────┐
-          ▼               ▼               ▼
-     useBlock()       useBomb()       scoreUp()
-          │               │               │
-          ▼               ▼               ▼
-    blocks - 1        bombs - 1       score + 1
+```mermaid
+flowchart TB
+    NewPlayer["new Player()\n{score:0, blocks:3, bombs:3}"]
+    UseBlock["useBlock()\nblocks - 1"]
+    UseBomb["useBomb()\nbombs - 1"]
+    ScoreUp["scoreUp()\nscore + 1"]
+
+    NewPlayer --> UseBlock
+    NewPlayer --> UseBomb
+    NewPlayer --> ScoreUp
 ```
 
 ---
@@ -124,11 +155,37 @@ new Player()  ──→  { score: 0, blocks: 3, bombs: 3 }
 | BLOCK | — | BLOCK | 不可變（永久障礙） |
 | EXPLOSION | — | EXPLOSION | 不可變（永久殘骸） |
 
+### 格子狀態轉換圖
+
+```mermaid
+stateDiagram-v2
+    [*] --> SPACE: initial
+
+    SPACE --> BLOCK: placeBlock
+    SPACE --> BOMB: placeBomb
+    SPACE --> CHESS: moveChess 移入
+    BOMB --> BLOCK: placeBlock 覆蓋
+    BOMB --> EXPLOSION: moveChess 踩到
+    CHESS --> SPACE: moveChess 移出 / 得分
+
+    BLOCK --> [*]: 永久障礙
+    EXPLOSION --> [*]: 永久殘骸
+```
+
 ### 回合轉換
 
-```
-PLAYER.ONE  ──動作完成──→  PLAYER.TWO
-PLAYER.TWO  ──動作完成──→  PLAYER.ONE
+```mermaid
+stateDiagram-v2
+    [*] --> PLAYER_ONE: initial
 
-（若任一玩家分數 ≥ WINNING_SCORE，則不切換回合，設置 winner）
+    PLAYER_ONE --> PLAYER_TWO: 動作完成
+    PLAYER_TWO --> PLAYER_ONE: 動作完成
+
+    PLAYER_ONE --> WINNER_P1: score >= WINNING_SCORE
+    PLAYER_TWO --> WINNER_P2: score >= WINNING_SCORE
+
+    WINNER_P1 --> [*]
+    WINNER_P2 --> [*]
 ```
+
+> 若任一玩家分數 ≥ `WINNING_SCORE`（5），則不切換回合，設置 `winner`。
