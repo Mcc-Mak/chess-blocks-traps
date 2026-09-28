@@ -1,9 +1,9 @@
 {
   "name": "chess-blocks-traps",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
-  "description": "A 2-player chess variant with blocks and traps. Bilingual (Traditional Chinese / English).",
+  "description": "A 2-player chess variant with blocks and bombs. Traditional Chinese UI.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

@@ -40,10 +40,10 @@ npm run preview    # serve the built ./dist locally
 
 ## Architecture
 
-- `src/game/` (`constants.js`, `engine.js`) is **pure and UI-agnostic**: no DOM access, no React imports, no mutation. The engine is OOP — `Game`, `Player`, `Cell` classes — but **immutable**: every action method returns a new instance, the receiver is never mutated. Do not introduce side effects or React coupling here.
-- `src/i18n/` (`strings.js`, `LanguageContext.jsx`) holds all bilingual strings (繁體中文 default / English). Display text must never be hard-coded in components — always read via the `useI18n()` `t` table.
+- `src/game/` (`constants.js`, `engine.js`) is **pure and UI-agnostic**: no DOM access, no React imports, no mutation. The engine is OOP — `Game`, `Player`, `Cell` classes — but **immutable**: every action method returns a new instance, the receiver is never mutated. **One action per round**: placing a block, placing a bomb, or moving a chess each end the turn immediately. Do not introduce side effects or React coupling here.
 - `src/hooks/useGame.js` is the **only** bridge between React and the engine (a `useReducer` over `Game` instance methods). UI state (e.g. modal visibility) stays as local `useState` in components, not in the game reducer.
 - Components in `src/components/` are stateless recipients of the `game` object; they dispatch via handlers, never mutate.
+- All display text is **Traditional Chinese**, defined as module-level `TEXT` constants in each component. Do not introduce a language-switching layer.
 
 ## Style
 
