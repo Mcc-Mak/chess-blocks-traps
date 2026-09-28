@@ -8,8 +8,8 @@
 ## 1. 安裝
 
 ```bash
-git clone https://github.com/Mcc-Mak/chess_blocks_traps.git
-cd chess_blocks_traps
+git clone https://github.com/Mcc-Mak/chess-blocks-traps.git
+cd chess-blocks-traps
 npm install
 ```
 
@@ -71,7 +71,7 @@ gh run watch
 - **僅推送至 `dev-001`**。絕不直接推送至 `dev` 或 `main`。
 - `dev` 與 `main` 必須保持未受保護（無分支保護規則）。
 - 管線使用內建 `GITHUB_TOKEN`，不需設定密鑰。
-- 線上網址：<https://mcc-mak.github.io/chess_blocks_traps/>
+- 線上網址：<https://mcc-mak.github.io/chess-blocks-traps/>
 
 ## 6. 專案結構速覽
 
