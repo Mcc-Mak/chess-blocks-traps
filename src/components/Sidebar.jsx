@@ -33,7 +33,7 @@ export default function Sidebar({ game }) {
 
   return (
     <aside className="sidebar">
-      <section className="panel panel-turn">
+      <section className={`panel panel-turn turn-p${state.turn}`}>
         <h2 className="panel-title">{TEXT.playerTurn}</h2>
         <div className="turn-display">
           <img className="turn-img" src={playerChessImage(state.turn)} alt={TEXT.player} />
