@@ -3,6 +3,13 @@
 本檔案記錄本專案所有重要變更。
 版本遵循[語意化版本](https://semver.org/) `MAJOR.MINOR.PATCH`。
 
+## [1.4.5] - 2026-09-28
+
+### 修正
+- `README.md` 示範影片改用 GIF 格式嵌入，修復 GitHub CSP 阻擋 Release 資產 `<video>` 播放的問題。
+- 新增 `demo.gif`（640px、12fps、2.7MB，由 `demo.mp4` 以 ffmpeg 轉換）。
+- 保留 MP4 下載連結（Release 資產）。
+
 ## [1.4.4] - 2026-09-28
 
 ### 修正
