@@ -3,6 +3,29 @@
 All notable changes to this project are documented in this file.
 Versions follow [Semantic Versioning](https://semver.org/) `MAJOR.MINOR.PATCH`.
 
+## [1.1.0] - 2026-09-28
+
+### Changed
+- Renamed the game from "Anonymous Chessboard" to **棋塊陷阱 · Chess Blocks & Traps**
+  (`package.json` name → `chess-blocks-traps`, title and `<html lang>` updated).
+- Rewrote the game engine as **immutable OOP** — `Game`, `Player`, and `Cell`
+  classes in `engine.js`. Every action method returns a new instance; the
+  receiver is never mutated. `useGame` now reduces over `Game` instance methods.
+- Made the entire UI **bilingual** (繁體中文 / English) with Traditional Chinese
+  as the default. All display text moved into `src/i18n/strings.js` and read
+  via the `useI18n()` `t` table; a `LanguageToggle` button switches languages.
+- Redesigned the layout and styling: dark themed panels, gradient title,
+  board coordinate labels (A–H / 1–8), score progress bars, skill-slot
+  labels, animated modals, and improved responsive behavior.
+- Updated `README.md` and `AGENTS.md` to document the OOP engine and i18n layer.
+
+### Added
+- `src/i18n/strings.js` — parallel `tc` / `en` string tables.
+- `src/i18n/LanguageContext.jsx` — `LanguageProvider` + `useI18n` hook
+  (`{ lang, setLang, toggle, t }`).
+- `src/components/LanguageToggle.jsx` — header language switch button.
+- `PLAYER.NONE` constant for cleaner empty-cell ownership.
+
 ## [1.0.2] - 2026-09-28
 
 ### Changed

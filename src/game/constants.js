@@ -30,7 +30,7 @@ export const STATUS = {
   EXIT: 'EXIT',
 };
 
-export const PLAYER = { ONE: 1, TWO: 2 };
+export const PLAYER = { NONE: -1, ONE: 1, TWO: 2 };
 
 export const BOARD = { ROWS: 8, COLUMNS: 8 };
 
