@@ -3,6 +3,19 @@
 All notable changes to this project are documented in this file.
 Versions follow [Semantic Versioning](https://semver.org/) `MAJOR.MINOR.PATCH`.
 
+## [1.0.1] - 2026-09-28
+
+### Fixed
+- `deploy_reactjs_page.yml`: removed incorrect `blog/` working directory and
+  cache-dependency path; build now runs at repo root and uploads `./dist`.
+- `auto-merge.yml`: added a fail-fast guard that errors clearly when the
+  `GIT_PUSH_TOKEN` secret is empty/missing, instead of failing with a cryptic
+  `could not read Username` git prompt during checkout.
+
+### Changed
+- `AGENTS.md`: replaced the (now-fixed) `blog/` deploy gotcha with a note on
+  the `GIT_PUSH_TOKEN` secret requirement.
+
 ## [1.0.0] - 2026-09-28
 
 ### Added

@@ -18,8 +18,8 @@ dev-001  --(push)-->  auto-merge  -->  dev  --(auto-merge)-->  main  --(Pages de
 ```
 
 - Pushing to `dev-001` triggers `auto-merge.yml` → merges into `dev` → which triggers merge into `main` → which triggers `deploy_reactjs_page.yml`.
-- Auto-merge requires the `GIT_PUSH_TOKEN` repo secret and main-branch protection bypass (see comments in `.github/workflows/auto-merge.yml`). If merges stall, the secret or protection config is the usual cause.
-- **Known gotcha:** `deploy_reactjs_page.yml` references `working-directory: blog` and `path: ./blog/dist`, but the app lives at repo root (no `blog/` dir). This workflow will fail until those paths are corrected to `.` / `./dist`. Fix it before relying on Pages deploy.
+- Auto-merge requires the `GIT_PUSH_TOKEN` repo secret (a fine-grained PAT with Contents: read+write) and main-branch protection bypass (see comments in `.github/workflows/auto-merge.yml`). If merges stall with `could not read Username for 'https://github.com'`, the secret is empty/missing/expired — set it under Settings → Secrets and variables → Actions. `GITHUB_TOKEN` cannot substitute: pushes made with it do not trigger the next workflow in the cascade.
+- `deploy_reactjs_page.yml` builds the app at repo root (`npm run build` → `./dist`) and deploys to Pages. Keep the working directory and `path` pointing at root, not a subdirectory.
 
 ## Commands
 

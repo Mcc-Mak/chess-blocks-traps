@@ -20,6 +20,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Verify GIT_PUSH_TOKEN is set
+        env:
+          TOKEN: ${{ secrets.GIT_PUSH_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::GIT_PUSH_TOKEN secret is empty or missing. Create a fine-grained PAT (Contents: read+write) under Settings → Secrets and variables → Actions. GITHUB_TOKEN cannot be used here because pushes made with it do not trigger the next workflow in the cascade."
+            exit 1
+          fi
       - name: Checkout dev
         uses: actions/checkout@v5
         with:
@@ -47,6 +55,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Verify GIT_PUSH_TOKEN is set
+        env:
+          TOKEN: ${{ secrets.GIT_PUSH_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::GIT_PUSH_TOKEN secret is empty or missing. Create a fine-grained PAT (Contents: read+write) under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
       - name: Checkout main
         uses: actions/checkout@v5
         with:
