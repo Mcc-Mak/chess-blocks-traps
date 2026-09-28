@@ -3,6 +3,35 @@
 All notable changes to this project are documented in this file.
 Versions follow [Semantic Versioning](https://semver.org/) `MAJOR.MINOR.PATCH`.
 
+## [1.2.0] - 2026-09-28
+
+### Changed
+- **One action per round**: placing a block, placing a bomb, or moving a chess
+  now each end the turn immediately. Removed per-round action counters
+  (`movePerRound`, `blockPerRound`, `trapPerRound`) from `Player`; the class
+  now tracks only `score`, `blocksRemaining`, and `bombsRemaining`.
+- **Renamed "trap" to "bomb"** throughout the codebase for clarity (the
+  hidden item explodes on contact). `CELL.TRAP` → `CELL.BOMB`,
+  `selectTrap` → `selectBomb`, `placeTrap` → `placeBomb`,
+  `playerTrapImage` → `playerBombImage`, `TRAPS_PER_GAME` →
+  `BOMBS_PER_PLAYER`. Asset files renamed `TRAP_*.PNG` → `BOMB_*.PNG`.
+- **All-Traditional Chinese UI**: removed the bilingual i18n layer
+  (`src/i18n/`, `LanguageToggle.jsx`). Display text is now hardcoded as
+  module-level `TEXT` constants in each component, per the original design.
+- **Sidebar moved to the left** of the chessboard (swapped render order
+  in `App.jsx`).
+- Renamed config constants for clarity: `END_SCORE` → `WINNING_SCORE`,
+  `END_COLUMNS` → `GOAL_COLUMNS`, `BLOCKS_PER_GAME` →
+  `BLOCKS_PER_PLAYER`.
+- `currentPlayer` and `opponent` are now getters on `Game`.
+- Added live site URL to `README.md`; updated rules, project structure,
+  and coding standards sections.
+
+### Removed
+- `src/i18n/strings.js`, `src/i18n/LanguageContext.jsx` — no dual language.
+- `src/components/LanguageToggle.jsx` — no language toggle.
+- `STATUS.EXIT` — unused enum member.
+
 ## [1.1.0] - 2026-09-28
 
 ### Changed

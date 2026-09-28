@@ -1,4 +1,4 @@
-export default function Modal({ title, onClose, children, closeLabel = 'Close' }) {
+export default function Modal({ title, onClose, children, closeLabel = '關閉' }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
