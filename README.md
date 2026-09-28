@@ -6,6 +6,12 @@
 
 > 完整文件索引見 [TOCTREE.md](TOCTREE.md)。
 
+## 示範影片
+
+<video src="demo.mp4" controls autoplay loop muted width="100%"></video>
+
+[下載示範影片](demo.mp4)
+
 ## 規則
 
 - **每回合僅能執行一項動作**：移動棋子、放置方塊或放置炸彈，三選一。

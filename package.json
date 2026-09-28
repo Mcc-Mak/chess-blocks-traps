@@ -1,7 +1,7 @@
 {
   "name": "chess-blocks-traps",
   "private": true,
-  "version": "1.4.1",
+  "version": "1.4.2",
   "homepage": "https://mcc-mak.github.io/chess-blocks-traps/",
   "type": "module",
   "description": "A 2-player chess variant with blocks and bombs. Traditional Chinese UI.",
