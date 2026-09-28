@@ -3,6 +3,16 @@
 本檔案記錄本專案所有重要變更。
 版本遵循[語意化版本](https://semver.org/) `MAJOR.MINOR.PATCH`。
 
+## [1.4.1] - 2026-09-28
+
+### 變更
+- GitHub 倉庫名稱由 `chess_blocks_traps` 重新命名為 `chess-blocks-traps`。
+- 倉庫 URL：`https://github.com/Mcc-Mak/chess-blocks-traps.git`。
+- GitHub Pages URL：`https://mcc-mak.github.io/chess-blocks-traps/`。
+- `package.json` 新增 `homepage` 欄位。
+- 更新 `README.md`、`doc/QuickStart.md` 中所有舊 URL 參照。
+- Git remote origin 已更新至新 URL。
+
 ## [1.4.0] - 2026-09-28
 
 ### 新增

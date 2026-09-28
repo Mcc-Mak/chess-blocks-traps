@@ -2,7 +2,7 @@
 
 一款雙人對戰的棋盤變體遊戲，玩家在 8×8 棋盤上放置**方塊**與隱形**炸彈**。以 **React + Vite** 打造，部署於 **GitHub Pages**。
 
-**線上版本：** <https://mcc-mak.github.io/chess_blocks_traps/>
+**線上版本：** <https://mcc-mak.github.io/chess-blocks-traps/>
 
 > 完整文件索引見 [TOCTREE.md](TOCTREE.md)。
 
