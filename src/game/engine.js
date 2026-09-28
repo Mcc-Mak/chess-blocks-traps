@@ -12,45 +12,35 @@ export class Cell {
     this.value = value;
     this.name = name;
   }
+
   static space() { return new Cell(CELL.SPACE); }
   static chess(player) { return new Cell(CELL.CHESS, player); }
-  static trap() { return new Cell(CELL.TRAP); }
+  static bomb() { return new Cell(CELL.BOMB); }
   static block(player) { return new Cell(CELL.BLOCK, player); }
   static explosion() { return new Cell(CELL.EXPLOSION); }
+
   clone() { return new Cell(this.value, this.name); }
 }
 
 export class Player {
   constructor({
     score = 0,
-    blockPerGame = GAME.BLOCKS_PER_GAME,
-    trapPerGame = GAME.TRAPS_PER_GAME,
-    movePerRound = 1,
-    blockPerRound = 1,
-    trapPerRound = 1,
+    blocksRemaining = GAME.BLOCKS_PER_PLAYER,
+    bombsRemaining = GAME.BOMBS_PER_PLAYER,
   } = {}) {
     this.score = score;
-    this.blockPerGame = blockPerGame;
-    this.trapPerGame = trapPerGame;
-    this.movePerRound = movePerRound;
-    this.blockPerRound = blockPerRound;
-    this.trapPerRound = trapPerRound;
+    this.blocksRemaining = blocksRemaining;
+    this.bombsRemaining = bombsRemaining;
   }
+
   clone() { return new Player(this); }
-  get canMove() { return this.movePerRound > 0; }
-  get canBlock() { return this.blockPerRound > 0 && this.blockPerGame > 0; }
-  get canTrap() { return this.trapPerRound > 0 && this.trapPerGame > 0; }
-  useMove() { const n = this.clone(); n.movePerRound -= 1; return n; }
-  useBlock() { const n = this.clone(); n.blockPerGame -= 1; n.blockPerRound -= 1; return n; }
-  useTrap() { const n = this.clone(); n.trapPerGame -= 1; n.trapPerRound -= 1; return n; }
-  scoreUp() { const n = this.clone(); n.score += 1; return n; }
-  resetRound() {
-    const n = this.clone();
-    n.movePerRound = 1;
-    n.blockPerRound = 1;
-    n.trapPerRound = 1;
-    return n;
-  }
+
+  get canBlock() { return this.blocksRemaining > 0; }
+  get canBomb() { return this.bombsRemaining > 0; }
+
+  useBlock() { const next = this.clone(); next.blocksRemaining -= 1; return next; }
+  useBomb() { const next = this.clone(); next.bombsRemaining -= 1; return next; }
+  scoreUp() { const next = this.clone(); next.score += 1; return next; }
 }
 
 export class Game {
@@ -98,8 +88,8 @@ export class Game {
     });
   }
 
-  currentPlayer() { return this.players[this.turn]; }
-  otherPlayer() { return this.turn === PLAYER.ONE ? PLAYER.TWO : PLAYER.ONE; }
+  get currentPlayer() { return this.players[this.turn]; }
+  get opponent() { return this.turn === PLAYER.ONE ? PLAYER.TWO : PLAYER.ONE; }
 
   movableTargets(row, col) {
     const targets = [];
@@ -108,7 +98,7 @@ export class Game {
       const nc = col + d.dc;
       if (nr < 0 || nr >= BOARD.ROWS || nc < 0 || nc >= BOARD.COLUMNS) continue;
       const cell = this.board[nr][nc];
-      if (cell.value === CELL.SPACE || cell.value === CELL.TRAP) {
+      if (cell.value === CELL.SPACE || cell.value === CELL.BOMB) {
         targets.push({ row: nr, col: nc, status: d.status });
       }
     }
@@ -132,23 +122,22 @@ export class Game {
   }
 
   selectBlock() {
-    if (this.winner || !this.currentPlayer().canBlock) return this;
+    if (this.winner || !this.currentPlayer.canBlock) return this;
     const next = this.clone();
     next.selection = { type: 'block' };
     return next;
   }
 
-  selectTrap() {
-    if (this.winner || !this.currentPlayer().canTrap) return this;
+  selectBomb() {
+    if (this.winner || !this.currentPlayer.canBomb) return this;
     const next = this.clone();
-    next.selection = { type: 'trap' };
+    next.selection = { type: 'bomb' };
     return next;
   }
 
   moveChess(toRow, toCol) {
     if (this.winner) return this;
     if (!this.selection || this.selection.type !== 'chess') return this;
-    if (!this.currentPlayer().canMove) return this;
 
     const { row, col } = this.selection;
     const target = this.movableTargets(row, col).find(
@@ -157,15 +146,16 @@ export class Game {
     if (!target) return this;
 
     const next = this.clone();
-    let player = next.currentPlayer().useMove();
+    let player = next.currentPlayer;
+
     next.board[row][col] = Cell.space();
 
     const targetCell = next.board[toRow][toCol];
-    if (targetCell.value === CELL.TRAP) {
+    if (targetCell.value === CELL.BOMB) {
       next.board[toRow][toCol] = Cell.explosion();
     } else {
       next.board[toRow][toCol] = Cell.chess(next.turn);
-      if (toCol === GAME.END_COLUMNS[next.turn]) {
+      if (toCol === GAME.GOAL_COLUMNS[next.turn]) {
         player = player.scoreUp();
         next.board[toRow][toCol] = Cell.space();
       }
@@ -173,12 +163,10 @@ export class Game {
     next.players[next.turn] = player;
     next.selection = null;
 
-    if (player.score >= GAME.END_SCORE) {
+    if (player.score >= GAME.WINNING_SCORE) {
       next.winner = next.turn;
     } else {
-      const other = next.otherPlayer();
-      next.turn = other;
-      next.players[other] = next.players[other].resetRound();
+      next.turn = next.opponent;
     }
     return next;
   }
@@ -186,27 +174,29 @@ export class Game {
   placeBlock(row, col) {
     if (this.winner) return this;
     if (!this.selection || this.selection.type !== 'block') return this;
-    if (!this.currentPlayer().canBlock) return this;
+    if (!this.currentPlayer.canBlock) return this;
     const cell = this.board[row][col];
-    if (cell.value !== CELL.SPACE && cell.value !== CELL.TRAP) return this;
+    if (cell.value !== CELL.SPACE && cell.value !== CELL.BOMB) return this;
 
     const next = this.clone();
-    next.players[next.turn] = next.currentPlayer().useBlock();
+    next.players[next.turn] = next.currentPlayer.useBlock();
     next.board[row][col] = Cell.block(next.turn);
     next.selection = null;
+    next.turn = next.opponent;
     return next;
   }
 
-  placeTrap(row, col) {
+  placeBomb(row, col) {
     if (this.winner) return this;
-    if (!this.selection || this.selection.type !== 'trap') return this;
-    if (!this.currentPlayer().canTrap) return this;
+    if (!this.selection || this.selection.type !== 'bomb') return this;
+    if (!this.currentPlayer.canBomb) return this;
     if (this.board[row][col].value !== CELL.SPACE) return this;
 
     const next = this.clone();
-    next.players[next.turn] = next.currentPlayer().useTrap();
-    next.board[row][col] = Cell.trap();
+    next.players[next.turn] = next.currentPlayer.useBomb();
+    next.board[row][col] = Cell.bomb();
     next.selection = null;
+    next.turn = next.opponent;
     return next;
   }
 }

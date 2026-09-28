@@ -35,8 +35,8 @@ export default function Chessboard({ game }) {
       game.placeBlock(r, c);
       return;
     }
-    if (sel.type === 'trap') {
-      game.placeTrap(r, c);
+    if (sel.type === 'bomb') {
+      game.placeBomb(r, c);
       return;
     }
   }
@@ -89,7 +89,7 @@ export default function Chessboard({ game }) {
 function renderCell(cell, turn, isSelected, target) {
   switch (cell.value) {
     case CELL.SPACE:
-    case CELL.TRAP: {
+    case CELL.BOMB: {
       if (target) {
         return {
           image: directionImage(target.status),

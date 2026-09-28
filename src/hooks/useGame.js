@@ -11,14 +11,14 @@ function reducer(state, action) {
       return state.clearSelection();
     case 'SELECT_BLOCK':
       return state.selectBlock();
-    case 'SELECT_TRAP':
-      return state.selectTrap();
+    case 'SELECT_BOMB':
+      return state.selectBomb();
     case 'MOVE_CHESS':
       return state.moveChess(action.row, action.col);
     case 'PLACE_BLOCK':
       return state.placeBlock(action.row, action.col);
-    case 'PLACE_TRAP':
-      return state.placeTrap(action.row, action.col);
+    case 'PLACE_BOMB':
+      return state.placeBomb(action.row, action.col);
     default:
       return state;
   }
@@ -27,28 +27,36 @@ function reducer(state, action) {
 export function useGame() {
   const [state, dispatch] = useReducer(reducer, undefined, () => Game.initial());
 
-  const handlers = {
-    reset: useCallback(() => dispatch({ type: 'RESET' }), []),
-    selectChess: useCallback(
-      (row, col) => dispatch({ type: 'SELECT_CHESS', row, col }),
-      []
-    ),
-    clearSelection: useCallback(() => dispatch({ type: 'CLEAR_SELECTION' }), []),
-    selectBlock: useCallback(() => dispatch({ type: 'SELECT_BLOCK' }), []),
-    selectTrap: useCallback(() => dispatch({ type: 'SELECT_TRAP' }), []),
-    moveChess: useCallback(
-      (row, col) => dispatch({ type: 'MOVE_CHESS', row, col }),
-      []
-    ),
-    placeBlock: useCallback(
-      (row, col) => dispatch({ type: 'PLACE_BLOCK', row, col }),
-      []
-    ),
-    placeTrap: useCallback(
-      (row, col) => dispatch({ type: 'PLACE_TRAP', row, col }),
-      []
-    ),
-  };
+  const reset = useCallback(() => dispatch({ type: 'RESET' }), []);
+  const selectChess = useCallback(
+    (row, col) => dispatch({ type: 'SELECT_CHESS', row, col }),
+    []
+  );
+  const clearSelection = useCallback(() => dispatch({ type: 'CLEAR_SELECTION' }), []);
+  const selectBlock = useCallback(() => dispatch({ type: 'SELECT_BLOCK' }), []);
+  const selectBomb = useCallback(() => dispatch({ type: 'SELECT_BOMB' }), []);
+  const moveChess = useCallback(
+    (row, col) => dispatch({ type: 'MOVE_CHESS', row, col }),
+    []
+  );
+  const placeBlock = useCallback(
+    (row, col) => dispatch({ type: 'PLACE_BLOCK', row, col }),
+    []
+  );
+  const placeBomb = useCallback(
+    (row, col) => dispatch({ type: 'PLACE_BOMB', row, col }),
+    []
+  );
 
-  return { state, ...handlers };
+  return {
+    state,
+    reset,
+    selectChess,
+    clearSelection,
+    selectBlock,
+    selectBomb,
+    moveChess,
+    placeBlock,
+    placeBomb,
+  };
 }

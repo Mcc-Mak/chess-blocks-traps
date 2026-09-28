@@ -1,35 +1,44 @@
 import { useState } from 'react';
 import { useGame } from './hooks/useGame.js';
-import { useI18n } from './i18n/LanguageContext.jsx';
 import Chessboard from './components/Chessboard.jsx';
 import Sidebar from './components/Sidebar.jsx';
 import Modal from './components/Modal.jsx';
-import LanguageToggle from './components/LanguageToggle.jsx';
+
+const TEXT = {
+  title: '棋塊陷阱',
+  rules: '遊戲規則',
+  start: '開始遊戲',
+  victory: '勝利',
+  newGame: '再來一局',
+  wins: '獲勝！',
+  player: '玩家',
+  rulesList: [
+    '每回合僅能執行一項動作：移動棋子、放置方塊或放置炸彈。',
+    '每局雙方各獲 3 個方塊與 3 個炸彈。',
+    '棋子抵達對方底線即得 1 分。',
+    '先達 5 分者勝！',
+  ],
+};
 
 export default function App() {
   const game = useGame();
-  const { t } = useI18n();
   const [showRules, setShowRules] = useState(true);
 
   return (
     <div className="app">
       <header className="app-header">
-        <h1 className="title">
-          <span className="title-main">{t.appTitle}</span>
-          <span className="title-sub">{t.appSubtitle}</span>
-        </h1>
-        <LanguageToggle />
+        <h1 className="title">{TEXT.title}</h1>
       </header>
 
       <main className="layout">
-        <Chessboard game={game} />
         <Sidebar game={game} />
+        <Chessboard game={game} />
       </main>
 
       {showRules && (
-        <Modal title={t.rules} onClose={() => setShowRules(false)} closeLabel={t.start}>
+        <Modal title={TEXT.rules} onClose={() => setShowRules(false)} closeLabel={TEXT.start}>
           <ol className="rules">
-            {t.rulesList.map((line, i) => (
+            {TEXT.rulesList.map((line, i) => (
               <li key={i}>{line}</li>
             ))}
           </ol>
@@ -37,9 +46,9 @@ export default function App() {
       )}
 
       {game.state.winner && (
-        <Modal title={t.victory} onClose={game.reset} closeLabel={t.newGame}>
+        <Modal title={TEXT.victory} onClose={game.reset} closeLabel={TEXT.newGame}>
           <p className="victory-text">
-            {t.player} {game.state.winner} {t.wins}
+            {TEXT.player} {game.state.winner} {TEXT.wins}
           </p>
         </Modal>
       )}
