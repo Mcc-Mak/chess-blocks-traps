@@ -11,15 +11,16 @@ Compact guidance for OpenCode sessions working in this repo.
 
 ## Branch & deploy flow
 
-The repo has an auto-merge cascade driven by GitHub Actions — do not replicate it manually:
+The repo has a single release pipeline driven by GitHub Actions — do not replicate it manually:
 
 ```
-dev-001  --(push)-->  auto-merge  -->  dev  --(auto-merge)-->  main  --(Pages deploy)
+push to dev-001  -->  auto-merge.yml:  dev-001 -> dev -> main  ->  build -> deploy to Pages
 ```
 
-- Pushing to `dev-001` triggers `auto-merge.yml` → merges into `dev` → which triggers merge into `main` → which triggers `deploy_reactjs_page.yml`.
-- Auto-merge requires the `GIT_PUSH_TOKEN` repo secret (a fine-grained PAT with Contents: read+write) and main-branch protection bypass (see comments in `.github/workflows/auto-merge.yml`). If merges stall with `could not read Username for 'https://github.com'`, the secret is empty/missing/expired — set it under Settings → Secrets and variables → Actions. `GITHUB_TOKEN` cannot substitute: pushes made with it do not trigger the next workflow in the cascade.
-- `deploy_reactjs_page.yml` builds the app at repo root (`npm run build` → `./dist`) and deploys to Pages. Keep the working directory and `path` pointing at root, not a subdirectory.
+- Pushing to `dev-001` triggers `auto-merge.yml`, which merges `dev-001` into `dev`, then `dev` into `main`, then builds and deploys `main` to GitHub Pages — all in one workflow.
+- The pipeline uses the built-in `GITHUB_TOKEN` (no PAT / `GIT_PUSH_TOKEN` secret needed). Pushes made with `GITHUB_TOKEN` do not trigger other workflows, which is fine because the whole cascade lives in one file.
+- `dev` and `main` must remain **unprotected** (no branch protection rules) so the `GITHUB_TOKEN` can push to them. If a protection rule is added, the merge steps will fail with 403.
+- Do not reintroduce a separate `deploy_reactjs_page.yml`; the deploy step is already part of `auto-merge.yml`.
 
 ## Commands
 

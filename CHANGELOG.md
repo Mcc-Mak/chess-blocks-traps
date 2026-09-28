@@ -3,6 +3,18 @@
 All notable changes to this project are documented in this file.
 Versions follow [Semantic Versioning](https://semver.org/) `MAJOR.MINOR.PATCH`.
 
+## [1.0.2] - 2026-09-28
+
+### Changed
+- Consolidated the release pipeline into a single `auto-merge.yml` workflow
+  that uses the built-in `GITHUB_TOKEN` instead of a PAT. The workflow now
+  cascades `dev-001 -> dev -> main`, builds, and deploys to Pages in one run.
+- Removed the `GIT_PUSH_TOKEN` / fine-grained PAT dependency entirely.
+- `dev` and `main` must remain unprotected for `GITHUB_TOKEN` pushes.
+
+### Removed
+- `deploy_reactjs_page.yml` — its deploy step is now part of `auto-merge.yml`.
+
 ## [1.0.1] - 2026-09-28
 
 ### Fixed
