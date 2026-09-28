@@ -1,18 +1,25 @@
 import { useState } from 'react';
 import { useGame } from './hooks/useGame.js';
+import { useI18n } from './i18n/LanguageContext.jsx';
 import Chessboard from './components/Chessboard.jsx';
 import Sidebar from './components/Sidebar.jsx';
 import Modal from './components/Modal.jsx';
+import LanguageToggle from './components/LanguageToggle.jsx';
 
 export default function App() {
   const game = useGame();
+  const { t } = useI18n();
   const [showRules, setShowRules] = useState(true);
 
   return (
     <div className="app">
-      <h1 className="title">
-        <u>Anonymous Chessboard</u>
-      </h1>
+      <header className="app-header">
+        <h1 className="title">
+          <span className="title-main">{t.appTitle}</span>
+          <span className="title-sub">{t.appSubtitle}</span>
+        </h1>
+        <LanguageToggle />
+      </header>
 
       <main className="layout">
         <Chessboard game={game} />
@@ -20,26 +27,20 @@ export default function App() {
       </main>
 
       {showRules && (
-        <Modal title="Rules" onClose={() => setShowRules(false)} closeLabel="Start">
+        <Modal title={t.rules} onClose={() => setShowRules(false)} closeLabel={t.start}>
           <ol className="rules">
-            <li>Next turn whenever any chess is moved once.</li>
-            <li>
-              3 traps and 3 blocks are given to each player per game; 1 trap and
-              1 block may be used each turn.
-            </li>
-            <li>1 point is obtained for reaching the opposite side.</li>
-            <li>Victory goes to the player who first reaches 5 points!</li>
+            {t.rulesList.map((line, i) => (
+              <li key={i}>{line}</li>
+            ))}
           </ol>
         </Modal>
       )}
 
       {game.state.winner && (
-        <Modal
-          title="Victory"
-          onClose={game.reset}
-          closeLabel="New Game"
-        >
-          <p className="victory-text">Player {game.state.winner} wins!</p>
+        <Modal title={t.victory} onClose={game.reset} closeLabel={t.newGame}>
+          <p className="victory-text">
+            {t.player} {game.state.winner} {t.wins}
+          </p>
         </Modal>
       )}
     </div>

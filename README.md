@@ -1,6 +1,6 @@
-# Anonymous Chessboard
+# 棋塊陷阱 · Chess Blocks & Traps
 
-A 2-player chess variant where each player also places **blocks** and hidden **traps** on an 8×8 board. Built with **React + Vite** and deployable to **GitHub Pages**.
+A 2-player chess variant where each player also places **blocks** and hidden **traps** on an 8×8 board. Built with **React + Vite** and deployable to **GitHub Pages**. The UI is **bilingual** (繁體中文 / English) with Traditional Chinese as the default; a toggle in the header switches languages.
 
 ## Rules
 
@@ -45,19 +45,23 @@ No CI pipeline config is bundled — use whichever deploy workflow you already h
 ├── package.json
 ├── documentation/           # Original game-design reference (kept)
 └── src/
-    ├── main.jsx             # React bootstrap
+    ├── main.jsx             # React bootstrap (wraps App in LanguageProvider)
     ├── App.jsx              # Top-level layout + modals
     ├── styles.css           # Global styles
     ├── assets/img/          # Game artwork (PNG)
     ├── game/
     │   ├── constants.js     # Cell/status enums, images, config
-    │   └── engine.js        # Pure game-logic functions
+    │   └── engine.js        # Pure OOP game engine (Game / Player / Cell)
     ├── hooks/
     │   └── useGame.js       # useReducer bridge to the engine
+    ├── i18n/
+    │   ├── strings.js       # Bilingual string tables (tc / en)
+    │   └── LanguageContext.jsx  # React context + useI18n hook
     └── components/
         ├── Chessboard.jsx
         ├── Sidebar.jsx
-        └── Modal.jsx
+        ├── Modal.jsx
+        └── LanguageToggle.jsx
 ```
 
 ## Coding standards
@@ -93,26 +97,33 @@ The codebase follows one consistent style, enforced by convention across every l
 
 ### 4. Game logic (`src/game`)
 
-- **Pure functions only.** Every action (`moveChess`, `placeBlock`, …) takes the current state and returns a **new** state object; input state is never mutated.
-- State is cloned via the internal `clone()` helper before any change.
+- **Immutable OOP.** The engine is built from three classes — `Game`, `Player`, `Cell` — all in `engine.js`. Every action method (`moveChess`, `placeBlock`, …) returns a **new** instance; the receiver is never mutated.
+- Each class provides a `clone()` helper; `Game` clones its board (new `Cell` per square) and players before applying a change.
+- `Cell` and `Player` expose factory helpers (`Cell.chess(player)`, `Player.useBlock()`, …) that return fresh instances, keeping state transitions allocation-explicit.
 - No DOM access, no React imports, no side effects — the engine is UI-agnostic and testable in isolation.
 - Constants (enums, config, image maps) live in `constants.js`; logic lives in `engine.js`.
 
-### 5. State management (`src/hooks`)
+### 5. Internationalization (`src/i18n`)
+
+- All user-facing strings live in `strings.js` as parallel `tc` / `en` tables. Traditional Chinese (`tc`) is the default.
+- `LanguageContext.jsx` exposes `useI18n()`, which returns `{ lang, setLang, toggle, t }`. Components read strings via `t.*`; the `LanguageToggle` button calls `toggle`.
+- Never hard-code display text in components — always go through the `t` table.
+
+### 6. State management (`src/hooks`)
 
 - `useGame` is the single bridge between React and the engine.
-- It wraps a `useReducer` whose reducer dispatches to pure engine functions.
+- It wraps a `useReducer` whose reducer dispatches to `Game` instance methods (each returns a new `Game`).
 - All dispatchers are memoized with `useCallback`.
 - UI-only flags (e.g. "rules modal open") live as local `useState` in the component that owns them, not in the game reducer.
 
-### 6. Styling (`src/styles.css`)
+### 7. Styling (`src/styles.css`)
 
 - Single shared stylesheet; no CSS-in-JS, no per-component CSS files.
 - `kebab-case` class names; layout via flexbox / grid.
 - Theme colors are declared as CSS custom properties in `:root` and referenced everywhere.
 - Responsive behavior uses media queries, not inline pixel hacks.
 
-### 7. Assets (`src/assets`)
+### 8. Assets (`src/assets`)
 
 - All images live under `src/assets/img/` and are imported as ESM so Vite hashes and bundles them.
 - File names are `UPPER_SNAKE` and match the original artwork names (e.g. `PLAYER_1.PNG`).

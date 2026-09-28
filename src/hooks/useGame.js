@@ -1,40 +1,31 @@
 import { useReducer, useCallback } from 'react';
-import {
-  createInitialState,
-  selectChess,
-  clearSelection,
-  selectBlock,
-  selectTrap,
-  moveChess,
-  placeBlock,
-  placeTrap,
-} from '../game/engine.js';
+import { Game } from '../game/engine.js';
 
 function reducer(state, action) {
   switch (action.type) {
     case 'RESET':
-      return createInitialState();
+      return Game.initial();
     case 'SELECT_CHESS':
-      return selectChess(state, action.row, action.col);
+      return state.selectChess(action.row, action.col);
     case 'CLEAR_SELECTION':
-      return clearSelection(state);
+      return state.clearSelection();
     case 'SELECT_BLOCK':
-      return selectBlock(state);
+      return state.selectBlock();
     case 'SELECT_TRAP':
-      return selectTrap(state);
+      return state.selectTrap();
     case 'MOVE_CHESS':
-      return moveChess(state, action.row, action.col);
+      return state.moveChess(action.row, action.col);
     case 'PLACE_BLOCK':
-      return placeBlock(state, action.row, action.col);
+      return state.placeBlock(action.row, action.col);
     case 'PLACE_TRAP':
-      return placeTrap(state, action.row, action.col);
+      return state.placeTrap(action.row, action.col);
     default:
       return state;
   }
 }
 
 export function useGame() {
-  const [state, dispatch] = useReducer(reducer, undefined, createInitialState);
+  const [state, dispatch] = useReducer(reducer, undefined, () => Game.initial());
 
   const handlers = {
     reset: useCallback(() => dispatch({ type: 'RESET' }), []),
