@@ -5,6 +5,7 @@ OpenCode 工作階段於此倉庫操作的精要指南。
 ## 變更流程（必須遵守）
 
 - **每次變更都必須更新 `CHANGELOG.md`**，採語意化版本 `X.X.X`，隨後以 git 提交。沒有「太小而不需更新」的變更。
+- **每次變更都必須同步更新 `doc/*.md`**——包括 TOCTREE（`TOCTREE.md` 位於根目錄）、Project Charter、PRD、SRS、ADR、API、Schema、ER、Quick Start 等所有受影響的文件檔案。若變更引入新主題而 `doc/` 尚無對應檔案，則新增之並更新 `TOCTREE.md`。沒有「太小而不需更新」的文件變更。
 - Git 控制流程：提交（附上規範化、格式良好的主旨與內文）→ 僅推送至 `dev-001` → 觸發自動合併管線 `dev-001 → dev → main → GitHub Pages 部署`。
 - 絕不直接推送至 `dev` 或 `main`；那些轉換由管線負責。
 
